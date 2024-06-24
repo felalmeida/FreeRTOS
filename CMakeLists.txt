@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.22)
+
+set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(SOURCE_PATH     "/home/dev/FreeRTOS")
+set(APP_SRC_PATH    "${SOURCE_PATH}/App")
+set(APP_LIB_PATH    "${SOURCE_PATH}/Lib")
+set(APP_CFG_PATH    "${SOURCE_PATH}/Cfg")
+
+set(PROJECT_NAME    "FreeRTOS_RP2040")
+set(VERSION_NUMBER  "1.0.0")
+set(BUILD_NUMBER    "1")
+
+set(PICO_SDK_PATH   "/usr/local/pico-sdk")
+set(FREERTOS_PATH   "/usr/local/freertos")
+
+add_compile_definitions(APP_NAME="${PROJECT_NAME}")
+add_compile_definitions(APP_VERSION="${VERSION_NUMBER}")
+add_compile_definitions(BUILD_NUM=${BUILD_NUMBER})
+
+include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
+
+add_executable(${PROJECT_NAME}
+    ${APP_SRC_PATH}/FreeRTOS.hpp
+    ${APP_SRC_PATH}/FreeRTOS.cpp
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${APP_SRC_PATH}
+    ${APP_LIB_PATH}
+    ${APP_CFG_PATH}
+)
+
+target_link_libraries(${PROJECT_NAME}
+    FreeRTOS-Kernel-Heap4
+    pico_stdlib
+    hardware_pio
+    hardware_gpio
+    pico_multicore
+)
+
+pico_sdk_init()
+
+pico_enable_stdio_usb(${PROJECT_NAME} 1)
+pico_enable_stdio_uart(${PROJECT_NAME} 1)
+pico_add_extra_outputs(${PROJECT_NAME})
+
+project(${PROJECT_NAME} CXX C ASM)
