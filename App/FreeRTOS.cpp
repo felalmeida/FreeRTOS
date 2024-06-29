@@ -3,7 +3,7 @@
 * Inicio:       02-Jun-2024                                                    *
 * Atualizacao:  06-Jun-2024                                                    *
 * Autor:        Felipe Almeida                                                 *
-* Descricao:    FreeRTOS Example                                               *
+* Descricao:    FreeRTOS                                                       *
 *******************************************************************************/
 #include "FreeRTOS.hpp"
 
@@ -11,7 +11,7 @@ using namespace std;
 
 int main(void) {
     int RETURN_STATUS = 0;
-    uint nQueueStartValue = 0, nDelay = 1;
+    uint nQueueStartValue = 0;
     char cQueueStartValue[20] = "";
 
     BaseType_t xTaskReturn = (long int) NULL;
@@ -19,6 +19,7 @@ int main(void) {
     stdio_init_all();
     sleep_ms(5000);
 
+    /*
     nQueue = xQueueCreate(1, sizeof(uint));
     cQueue = xQueueCreate(1, sizeof(char[20]));
     xMutex = xSemaphoreCreateMutex();
@@ -27,16 +28,16 @@ int main(void) {
     xQueueSend(cQueue, &cQueueStartValue, portMAX_DELAY);
 
     task_params_t pTaskParamArr[10] {
-        {1, "vTask01",(1 *nDelay), 1*1},
-        {2, "vTask02",(2 *nDelay), 2*1},
-        {3, "vTask03",(3 *nDelay), 3*1},
-        {4, "vTask04",(4 *nDelay), 4*1},
-        {5, "vTask05",(5 *nDelay), 5*1},
-        {6, "vTask06",(6 *nDelay), 6*1},
-        {7, "vTask07",(7 *nDelay), 7*1},
-        {8, "vTask08",(8 *nDelay), 8*1},
-        {9, "vTask09",(9 *nDelay), 9*1},
-        {10,"vTask10",(10*nDelay),10*1}
+        {1, "vTask01",(1 *10*Delay), 1*1},
+        {2, "vTask02",(2 *10*Delay), 2*1},
+        {3, "vTask03",(3 *10*Delay), 3*1},
+        {4, "vTask04",(4 *10*Delay), 4*1},
+        {5, "vTask05",(5 *10*Delay), 5*1},
+        {6, "vTask06",(6 *10*Delay), 6*1},
+        {7, "vTask07",(7 *10*Delay), 7*1},
+        {8, "vTask08",(8 *10*Delay), 8*1},
+        {9, "vTask09",(9 *10*Delay), 9*1},
+        {10,"vTask10",(10*10*Delay),10*1}
     };
 
     for (int nTaskIdx = 0; nTaskIdx < (sizeof(pTaskParamArr)/sizeof(task_params_t)); nTaskIdx++) {
@@ -47,10 +48,21 @@ int main(void) {
             RETURN_STATUS = -1;
         }
     }
+    */
+
+    // xTaskCreate(RandColors, "RandColors", 1024, NULL, 1, NULL);
+    xTaskCreate(LoopColors, "LoopColors", 1024, NULL, 1, NULL);
 
     if (RETURN_STATUS == 0) vTaskStartScheduler();
 
     return RETURN_STATUS;
+}
+
+int GenerateRandomInt (int v_MaxValue) {
+    uint32_t abs_time = get_absolute_time();
+
+    srand((unsigned) time(NULL)+abs_time);
+    return((int)((0.0+v_MaxValue)*rand()/(RAND_MAX+0.0)));
 }
 
 void vTask01(void *v_param) {
@@ -79,6 +91,41 @@ void vTask01(void *v_param) {
             cQueueValue_Recv
         );
         vTaskDelay(pdMS_TO_TICKS(pTaskParam.nTaskDelay));
+    }
+    vTaskDelete(NULL);
+}
+
+void RandColors(void *v_param) {
+    int nRed, nGreen, nBlue = 0;
+
+    while (true) {
+        nRed    = GenerateRandomInt(255);
+        nGreen  = GenerateRandomInt(255);
+        nBlue   = GenerateRandomInt(255);
+
+        printf("Color (%d,%d,%d)\n", nRed, nGreen, nBlue);
+        WS2812Led.fill(WS2812::RGB(nRed,nGreen,nBlue));
+        WS2812Led.show();
+        vTaskDelay(pdMS_TO_TICKS(nDelay*100));
+    }
+    vTaskDelete(NULL);
+}
+
+void LoopColors(void *v_param) {
+    int nColorArray[3] = {0,0,0};
+    while (true) {
+        for (int nColorIdx = 0; nColorIdx < 3; nColorIdx++) {
+            nColorArray[0] = 0;
+            nColorArray[1] = 0;
+            nColorArray[2] = 0;
+            for (int nColor = 0; nColor < 256; nColor++) {
+                nColorArray[nColorIdx] = nColor;
+                printf("Color (%d,%d,%d)\n", nColorArray[0], nColorArray[1], nColorArray[2]);
+                WS2812Led.fill(WS2812::RGB(nColorArray[0], nColorArray[1], nColorArray[2]));
+                WS2812Led.show();
+                vTaskDelay(pdMS_TO_TICKS(nDelay*10));
+            }
+        }
     }
     vTaskDelete(NULL);
 }

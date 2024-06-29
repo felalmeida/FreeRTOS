@@ -27,10 +27,8 @@ include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.c
 add_executable(${PROJECT_NAME}
     ${APP_SRC_PATH}/FreeRTOS.hpp
     ${APP_SRC_PATH}/FreeRTOS.cpp
-    ${APP_LIB_PATH}/WS2812.hpp
-    ${APP_LIB_PATH}/WS2812.cpp
 )
-
+ 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${APP_SRC_PATH}
     ${APP_LIB_PATH}
@@ -46,8 +44,6 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 pico_sdk_init()
-
-pico_generate_pio_header(${PROJECT_NAME} ${APP_LIB_PATH}/WS2812.pio)
 
 pico_enable_stdio_usb(${PROJECT_NAME} 1)
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
