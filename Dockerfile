@@ -4,12 +4,11 @@
 
 FROM ubuntu:22.04
 
-MAINTAINER Felipe Almeida <fel.almeida@gmail.com>
-
 LABEL name="Ubuntu For ARM Builds" \
   vendor="Ubuntu" \
   license="GPLv2" \
   build-date="20240602" \
+  maintainer="Felipe Almeida <fel.almeida@gmail.com>" \
   version="1.0"
 
 RUN echo "alias ll='clear;ls -ltrh;pwd;date'" >> /root/.bashrc \

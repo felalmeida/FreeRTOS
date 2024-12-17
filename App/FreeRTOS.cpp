@@ -19,7 +19,6 @@ int main(void) {
     stdio_init_all();
     sleep_ms(5000);
 
-    /*
     nQueue = xQueueCreate(1, sizeof(uint));
     cQueue = xQueueCreate(1, sizeof(char[20]));
     xMutex = xSemaphoreCreateMutex();
@@ -28,16 +27,16 @@ int main(void) {
     xQueueSend(cQueue, &cQueueStartValue, portMAX_DELAY);
 
     task_params_t pTaskParamArr[10] {
-        {1, "vTask01",(1 *10*Delay), 1*1},
-        {2, "vTask02",(2 *10*Delay), 2*1},
-        {3, "vTask03",(3 *10*Delay), 3*1},
-        {4, "vTask04",(4 *10*Delay), 4*1},
-        {5, "vTask05",(5 *10*Delay), 5*1},
-        {6, "vTask06",(6 *10*Delay), 6*1},
-        {7, "vTask07",(7 *10*Delay), 7*1},
-        {8, "vTask08",(8 *10*Delay), 8*1},
-        {9, "vTask09",(9 *10*Delay), 9*1},
-        {10,"vTask10",(10*10*Delay),10*1}
+        {1, "vTask01",(1 *10*nDelay), 1*1},
+        {2, "vTask02",(2 *10*nDelay), 2*1},
+        {3, "vTask03",(3 *10*nDelay), 3*1},
+        {4, "vTask04",(4 *10*nDelay), 4*1},
+        {5, "vTask05",(5 *10*nDelay), 5*1},
+        {6, "vTask06",(6 *10*nDelay), 6*1},
+        {7, "vTask07",(7 *10*nDelay), 7*1},
+        {8, "vTask08",(8 *10*nDelay), 8*1},
+        {9, "vTask09",(9 *10*nDelay), 9*1},
+        {10,"vTask10",(10*10*nDelay),10*1}
     };
 
     for (int nTaskIdx = 0; nTaskIdx < (sizeof(pTaskParamArr)/sizeof(task_params_t)); nTaskIdx++) {
@@ -48,10 +47,9 @@ int main(void) {
             RETURN_STATUS = -1;
         }
     }
-    */
 
     // xTaskCreate(RandColors, "RandColors", 1024, NULL, 1, NULL);
-    xTaskCreate(LoopColors, "LoopColors", 1024, NULL, 1, NULL);
+    // xTaskCreate(LoopColors, "LoopColors", 1024, NULL, 1, NULL);
 
     if (RETURN_STATUS == 0) vTaskStartScheduler();
 

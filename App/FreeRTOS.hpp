@@ -5,6 +5,9 @@
 * Autor:        Felipe Almeida                                                 *
 * Descricao:    FreeRTOS Header                                                *
 *******************************************************************************/
+#define PICO_PLATFORM   rp2040
+#define PICO_BOARD      pico
+
 #ifndef FreeRTOS_Example
 #define FreeRTOS_Example
 
