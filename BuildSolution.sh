@@ -21,7 +21,7 @@ if [ ${MountOverlay} -gt 0 ]; then
 
     ### Housekeeping
     rm -rf ${BasePath}/build > /dev/null 2>&1
-    clear
+    # clear
     ls -ltrh
     pwd
     date
