@@ -14,15 +14,16 @@ set(PROJECT_NAME    "FreeRTOS_RP2040")
 set(VERSION_NUMBER  "1.0.0")
 set(BUILD_NUMBER    "1")
 
-set(PICO_SDK_PATH   "/usr/local/pico-sdk")
-set(FREERTOS_PATH   "/usr/local/freertos")
+set(PICO_SDK_PATH           "/usr/local/pico-sdk")
+set(FREERTOS_PATH           "/usr/local/freertos/FreeRTOS")
+set(FREERTOS_KERNEL_PATH    "/usr/local/freertos/FreeRTOS/Source")
 
 add_compile_definitions(APP_NAME="${PROJECT_NAME}")
 add_compile_definitions(APP_VERSION="${VERSION_NUMBER}")
 add_compile_definitions(BUILD_NUM=${BUILD_NUMBER})
 
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
-include(${FREERTOS_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
+include(${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
 
 add_executable(${PROJECT_NAME}
     ${APP_SRC_PATH}/FreeRTOS.hpp
