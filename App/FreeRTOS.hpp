@@ -65,5 +65,6 @@ int GenerateRandomInt (int v_MaxValue);
 void vTask01(void *v_param);
 void RandColors(void *v_param);
 void LoopColors(void *v_param);
+void LoopAllColors(void *v_param);
 
 #endif // FreeRTOS_Example

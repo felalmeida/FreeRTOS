@@ -17,7 +17,7 @@ int main(void) {
     BaseType_t xTaskReturn = (long int) NULL;
 
     stdio_init_all();
-    sleep_ms(5000);
+    sleep_ms(10000);
 
     nQueue = xQueueCreate(1, sizeof(uint));
     cQueue = xQueueCreate(1, sizeof(char[20]));
@@ -39,6 +39,7 @@ int main(void) {
         {10,"vTask10",(10*10*nDelay),10*1}
     };
 
+    /*
     for (int nTaskIdx = 0; nTaskIdx < (sizeof(pTaskParamArr)/sizeof(task_params_t)); nTaskIdx++) {
         xTaskReturn = xTaskCreate(vTask01, *(&pTaskParamArr[nTaskIdx].cTaskName), 1024, &pTaskParamArr[nTaskIdx], *(&pTaskParamArr[nTaskIdx].nTaskPriority), NULL);
         if(xTaskReturn != pdPASS) {
@@ -47,16 +48,18 @@ int main(void) {
             RETURN_STATUS = -1;
         }
     }
+    */
 
     // xTaskCreate(RandColors, "RandColors", 1024, NULL, 1, NULL);
     // xTaskCreate(LoopColors, "LoopColors", 1024, NULL, 1, NULL);
+    xTaskCreate(LoopAllColors, "LoopAllColors", 1024, NULL, 1, NULL);
 
     if (RETURN_STATUS == 0) vTaskStartScheduler();
 
     return RETURN_STATUS;
 }
 
-int GenerateRandomInt (int v_MaxValue) {
+int GenerateRandomInt(int v_MaxValue) {
     uint32_t abs_time = get_absolute_time();
 
     srand((unsigned) time(NULL)+abs_time);
@@ -122,6 +125,26 @@ void LoopColors(void *v_param) {
                 WS2812Led.fill(WS2812::RGB(nColorArray[0], nColorArray[1], nColorArray[2]));
                 WS2812Led.show();
                 vTaskDelay(pdMS_TO_TICKS(nDelay*10));
+            }
+        }
+    }
+    vTaskDelete(NULL);
+}
+
+void LoopAllColors(void *v_param) {
+    int nColorArray[3] = {0,0,0};
+    while (true) {
+        for (int nRColorIdx = 0; nRColorIdx < 256; nRColorIdx++) {
+            for (int nGColorIdx = 0; nGColorIdx < 256; nGColorIdx++) {
+                for (int nBColorIdx = 0; nBColorIdx < 256; nBColorIdx++) {
+                    nColorArray[0] = nRColorIdx;
+                    nColorArray[1] = nGColorIdx;
+                    nColorArray[2] = nBColorIdx;
+                    printf("Color (%d,%d,%d)\n", nColorArray[0], nColorArray[1], nColorArray[2]);
+                    WS2812Led.fill(WS2812::RGB(nColorArray[0], nColorArray[1], nColorArray[2]));
+                    WS2812Led.show();
+                    vTaskDelay(pdMS_TO_TICKS(nDelay*10));
+                }
             }
         }
     }
